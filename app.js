@@ -5,7 +5,7 @@
 https://YOUR-BACKEND.example.com
 */
 
-const API_BASE = "https://mmadpnl.github.io/CODE/?utm_source=chatgpt.com;
+const API_BASE = "https://code-f6hx.onrender.com";
 
 let currentVoucher = null;
 
