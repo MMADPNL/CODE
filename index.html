@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پنل شارژ مالک</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Tahoma,Arial,sans-serif;
+    background:#07111f;
+    color:#fff;
+}
+
+.container{
+    max-width:480px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:#101d2d;
+    border-radius:18px;
+    padding:20px;
+    margin-top:20px;
+    box-shadow:0 8px 30px #0005;
+}
+
+h1{
+    text-align:center;
+    font-size:24px;
+}
+
+label{
+    display:block;
+    margin:15px 0 7px;
+}
+
+input,select,button{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:12px;
+    font-size:16px;
+}
+
+input,select{
+    background:#1b2a3d;
+    color:#fff;
+}
+
+button{
+    margin-top:18px;
+    background:#19c37d;
+    color:#06140e;
+    font-weight:bold;
+}
+
+button.danger{
+    background:#e05252;
+    color:#fff;
+}
+
+.code{
+    margin-top:20px;
+    padding:18px;
+    background:#06101c;
+    border:1px dashed #19c37d;
+    border-radius:14px;
+    text-align:center;
+}
+
+.code strong{
+    display:block;
+    font-size:25px;
+    letter-spacing:3px;
+    margin:10px 0;
+}
+
+.item{
+    background:#172638;
+    border-radius:12px;
+    padding:13px;
+    margin-top:10px;
+}
+
+.used{
+    opacity:.5;
+}
+
+.small{
+    font-size:12px;
+    color:#aab8c7;
+}
+
+.hidden{
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div id="login" class="card">
+
+<h1>🔐 ورود مالک</h1>
+
+<label>نام کاربری</label>
+<input id="username" placeholder="نام کاربری">
+
+<label>رمز عبور</label>
+<input id="password" type="password" placeholder="رمز عبور">
+
+<button onclick="login()">ورود</button>
+
+</div>
+
+
+<!-- PANEL -->
+<div id="panel" class="hidden">
+
+<div class="card">
+
+<h1>🎟️ پنل صدور شارژ</h1>
+
+<label>اپراتور</label>
+
+<select id="operator">
+<option>ایرانسل</option>
+<option>همراه اول</option>
+<option>رایتل</option>
+</select>
+
+<label>مبلغ شارژ</label>
+
+<input
+id="amount"
+type="number"
+placeholder="مثلاً 100000">
+
+<button onclick="createCode()">
+صدور کد یک‌بارمصرف
+</button>
+
+<div id="result" class="code hidden"></div>
+
+</div>
+
+
+<div class="card">
+
+<h1>📋 تاریخچه کدها</h1>
+
+<div id="history"></div>
+
+</div>
+
+
+<div class="card">
+
+<button class="danger" onclick="logout()">
+خروج مالک
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const USER="admin";
+const PASS="1234";
+
+let codes=
+JSON.parse(
+localStorage.getItem("owner_codes") || "[]"
+);
+
+
+// LOGIN
+function login(){
+
+const username=
+document.getElementById("username").value;
+
+const password=
+document.getElementById("password").value;
+
+if(
+username===USER &&
+password===PASS
+){
+
+document
+.getElementById("login")
+.classList.add("hidden");
+
+document
+.getElementById("panel")
+.classList.remove("hidden");
+
+renderHistory();
+
+}else{
+
+alert("نام کاربری یا رمز اشتباه است");
+
+}
+
+}
+
+
+// CREATE RANDOM CODE
+function randomCode(){
+
+const chars=
+"ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+let code="";
+
+for(let i=0;i<12;i++){
+
+code+=
+chars[
+Math.floor(
+Math.random()*chars.length
+)
+];
+
+}
+
+return code;
+
+}
+
+
+// CREATE CODE
+function createCode(){
+
+const operator=
+document.getElementById("operator").value;
+
+const amount=
+Number(
+document.getElementById("amount").value
+);
+
+if(!amount || amount<=0){
+
+alert("مبلغ معتبر وارد کن");
+
+return;
+
+}
+
+let code=randomCode();
+
+while(
+codes.some(x=>x.code===code)
+){
+
+code=randomCode();
+
+}
+
+
+const item={
+
+code:code,
+
+operator:operator,
+
+amount:amount,
+
+used:false,
+
+created:
+new Date().toLocaleString("fa-IR")
+
+};
+
+
+codes.unshift(item);
+
+localStorage.setItem(
+"owner_codes",
+JSON.stringify(codes)
+);
+
+
+const result=
+document.getElementById("result");
+
+result.classList.remove("hidden");
+
+result.innerHTML=
+
+"کد صادر شد"+
+
+"<strong>"+
+code+
+"</strong>"+
+
+operator+
+" — "+
+amount.toLocaleString("fa-IR")+
+" تومان"+
+
+"<br><span class='small'>"+
+"یک‌بارمصرف • "+
+item.created+
+"</span>"+
+
+"<button onclick='copyCode(\""+
+code+
+"\")'>کپی کد</button>";
+
+
+renderHistory();
+
+}
+
+
+// COPY
+function copyCode(code){
+
+if(navigator.clipboard){
+
+navigator.clipboard.writeText(code)
+
+.then(
+()=>alert("کد کپی شد")
+);
+
+}
+
+}
+
+
+// HISTORY
+function renderHistory(){
+
+const box=
+document.getElementById("history");
+
+if(codes.length===0){
+
+box.innerHTML=
+"<p class='small'>"+
+"هنوز کدی صادر نشده."+
+"</p>";
+
+return;
+
+}
+
+
+box.innerHTML="";
+
+
+codes.forEach(
+(x,i)=>{
+
+const div=
+document.createElement("div");
+
+div.className=
+"item"+
+(x.used ? " used" : "");
+
+
+div.innerHTML=
+
+"<b>"+
+x.operator+
+"</b><br>"+
+
+"مبلغ: "+
+Number(x.amount)
+.toLocaleString("fa-IR")+
+" تومان<br>"+
+
+"کد: <b>"+
+x.code+
+"</b><br>"+
+
+"<span class='small'>"+
+x.created+
+"</span><br>"+
+
+(
+x.used
+
+?
+
+"❌ استفاده شده"
+
+:
+
+"<button onclick='useCode("+
+i+
+")'>"+
+"مصرف کد"+
+"</button>"
+
+);
+
+
+box.appendChild(div);
+
+}
+
+);
+
+}
+
+
+// USE ONCE
+function useCode(index){
+
+if(codes[index].used){
+
+alert(
+"این کد قبلاً استفاده شده است"
+);
+
+return;
+
+}
+
+
+if(
+!confirm(
+"این کد فقط یک‌بار مصرف خواهد شد. ادامه می‌دهی؟"
+)
+){
+
+return;
+
+}
+
+
+codes[index].used=true;
+
+localStorage.setItem(
+"owner_codes",
+JSON.stringify(codes)
+);
+
+renderHistory();
+
+alert(
+"کد مصرف شد و دیگر قابل استفاده نیست."
+);
+
+}
+
+
+// LOGOUT
+function logout(){
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+  </html>
