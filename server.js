@@ -1,328 +1,138 @@
 const express = require("express");
-const crypto = require("crypto");
 const cors = require("cors");
 
 const app = express();
+const PORT = process.env.PORT || 10000;
+const DAILY_LIMIT = 400;
 
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+let usedToday = 0;
+let lastReset = new Date().toISOString().slice(0, 10);
+const history = [];
 
-/*
-====================================================
-تنظیمات
-====================================================
-*/
+function resetQuota() {
+  const today = new Date().toISOString().slice(0, 10);
 
-const DAILY_LIMIT = 400;
-
-/*
-در پروژه واقعی این اطلاعات باید در Database باشند.
-
-برای شروع، حافظه موقت استفاده شده.
-بعداً SQLite/PostgreSQL/Redis اضافه می‌کنیم.
-*/
-
-const requests = [];
-
-let dailyCounter = {
-    date: getDate(),
-    used: 0
-};
-
-
-/*
-====================================================
-تاریخ
-====================================================
-*/
-
-function getDate(){
-
-    return new Date()
-        .toISOString()
-        .slice(0,10);
-
+  if (today !== lastReset) {
+    usedToday = 0;
+    lastReset = today;
+  }
 }
 
-
-function resetQuotaIfNeeded(){
-
-    const today = getDate();
-
-    if(dailyCounter.date !== today){
-
-        dailyCounter = {
-            date:today,
-            used:0
-        };
-
-    }
-
-}
-
-
-/*
-====================================================
-API وضعیت سهمیه
-====================================================
-*/
-
-app.get(
-    "/api/quota",
-    (req,res)=>{
-
-        resetQuotaIfNeeded();
-
-        res.json({
-
-            success:true,
-
-            limit:DAILY_LIMIT,
-
-            used:dailyCounter.used,
-
-            remaining:
-                DAILY_LIMIT -
-                dailyCounter.used
-
-        });
-
-    }
-);
-
-
-/*
-====================================================
-درخواست ووچر
-====================================================
-*/
-
-app.post(
-    "/api/voucher/request",
-    async (req,res)=>{
-
-        resetQuotaIfNeeded();
-
-        if(dailyCounter.used >= DAILY_LIMIT){
-
-            return res.status(429).json({
-
-                success:false,
-
-                message:
-                    "سهمیه روزانه ۴۰۰ درخواست تمام شده است."
-
-            });
-
-        }
-
-
-        const {
-            type,
-            amount
-        } = req.body;
-
-
-        if(type !== "hot-voucher"){
-
-            return res.status(400).json({
-
-                success:false,
-
-                message:
-                    "نوع ووچر نامعتبر است."
-
-            });
-
-        }
-
-
-        if(
-            !amount ||
-            Number(amount) <= 0
-        ){
-
-            return res.status(400).json({
-
-                success:false,
-
-                message:
-                    "مبلغ نامعتبر است."
-
-            });
-
-        }
-
-
-        /*
-        ==============================================
-        اینجا باید API واقعی تأمین‌کننده فراخوانی شود.
-        ==============================================
-
-        const providerResult =
-            await buyFromProvider({
-                type,
-                amount
-            });
-
-        if(!providerResult.success){
-
-            return res.status(502).json({
-                success:false,
-                message:"تأمین‌کننده پاسخ موفق نداد."
-            });
-
-        }
-
-        const realCode =
-            providerResult.code;
-
-        ==============================================
-        */
-
-        return res.status(503).json({
-
-            success:false,
-
-            message:
-                "API تأمین‌کننده هنوز متصل نشده است. برای دریافت ووچر واقعی باید Provider API رسمی اضافه شود."
-
-        });
-
-    }
-);
-
-
-/*
-====================================================
-ثبت مصرف‌شده
-====================================================
-*/
-
-app.post(
-    "/api/voucher/used",
-    (req,res)=>{
-
-        const { id } = req.body;
-
-        const item =
-            requests.find(x => x.id === id);
-
-        if(!item){
-
-            return res.status(404).json({
-
-                success:false,
-
-                message:"ووچر پیدا نشد."
-
-            });
-
-        }
-
-        if(item.status === "used"){
-
-            return res.status(409).json({
-
-                success:false,
-
-                message:
-                    "این ووچر قبلاً مصرف‌شده ثبت شده است."
-
-            });
-
-        }
-
-        item.status = "used";
-
-        item.usedAt =
-            new Date().toISOString();
-
-        res.json({
-            success:true
-        });
-
-    }
-);
-
-
-/*
-====================================================
-سوابق
-====================================================
-*/
-
-app.get(
-    "/api/history",
-    (req,res)=>{
-
-        res.json({
-
-            success:true,
-
-            items:
-                requests.map(x => ({
-
-                    id:x.id,
-
-                    type:x.type,
-
-                    amount:x.amount,
-
-                    status:x.status,
-
-                    createdAt:x.createdAt,
-
-                    usedAt:x.usedAt || null
-
-                }))
-
-        });
-
-    }
-);
-
-
-/*
-====================================================
-خرید از Provider
-====================================================
-
-بعد از دریافت مستندات API واقعی، این تابع را
-تکمیل می‌کنیم.
-
-API Key هرگز نباید داخل index.html قرار بگیرد.
-
-مثلاً:
-
-process.env.PROVIDER_API_KEY
-process.env.PROVIDER_API_URL
-
-====================================================
-*/
-
-async function buyFromProvider(data){
-
-    throw new Error(
-        "Provider API is not configured."
-    );
-
-}
-
-
-/*
-====================================================
-سرور
-====================================================
-*/
-
-app.listen(
-    PORT,
-    ()=>{
-        console.log(
-            `CODE backend running on port ${PORT}`
-        );
-    }
-);
+// وضعیت سرور
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    service: "CODE Mobile Recharge PIN API",
+    status: "online"
+  });
+});
+
+// سهمیه
+app.get("/api/quota", (req, res) => {
+  resetQuota();
+
+  res.json({
+    success: true,
+    limit: DAILY_LIMIT,
+    used: usedToday,
+    remaining: DAILY_LIMIT - usedToday
+  });
+});
+
+// دریافت کد شارژ
+app.post("/api/recharge/request", async (req, res) => {
+  resetQuota();
+
+  if (usedToday >= DAILY_LIMIT) {
+    return res.status(429).json({
+      success: false,
+      message: "سهمیه روزانه ۴۰۰ کد تمام شده است."
+    });
+  }
+
+  const { operator, amount } = req.body;
+
+  const allowedOperators = [
+    "mci",
+    "irancell",
+    "rightel"
+  ];
+
+  const allowedAmounts = [
+    10000,
+    20000,
+    50000,
+    100000,
+    200000
+  ];
+
+  if (!allowedOperators.includes(operator)) {
+    return res.status(400).json({
+      success: false,
+      message: "اپراتور نامعتبر است."
+    });
+  }
+
+  if (!allowedAmounts.includes(Number(amount))) {
+    return res.status(400).json({
+      success: false,
+      message: "مبلغ شارژ نامعتبر است."
+    });
+  }
+
+  /*
+    این قسمت باید به API واقعی تأمین‌کننده وصل شود.
+
+    مثال ساختاری:
+
+    const voucher = await buyFromProvider({
+      operator,
+      amount
+    });
+
+    اگر خرید موفق بود:
+      usedToday++;
+
+    فعلاً عمداً کد ساختگی تولید نمی‌کنیم.
+  */
+
+  return res.status(503).json({
+    success: false,
+    message: "API تأمین‌کننده شارژ هنوز متصل نشده است."
+  });
+});
+
+// تاریخچه
+app.get("/api/history", (req, res) => {
+  res.json({
+    success: true,
+    history
+  });
+});
+
+// ثبت مصرف کد
+app.post("/api/recharge/used", (req, res) => {
+  const { id } = req.body;
+
+  const item = history.find(x => x.id === id);
+
+  if (!item) {
+    return res.status(404).json({
+      success: false,
+      message: "کد پیدا نشد."
+    });
+  }
+
+  item.used = true;
+
+  res.json({
+    success: true
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`CODE API running on port ${PORT}`);
+});
