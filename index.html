@@ -2,178 +2,1212 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CODE | Hot Voucher</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>CODE | پنل شماره مجازی</title>
 
 <style>
-body{
+*{
+    box-sizing:border-box;
     margin:0;
-    background:#07111f;
+    padding:0;
+    font-family:Tahoma,Arial,sans-serif;
+}
+
+body{
+    background:#070b14;
     color:#fff;
-    font-family:Tahoma,Arial,sans-serif
+    min-height:100vh;
 }
 
-.box{
-    width:min(480px,92%);
-    margin:35px auto;
-    background:#0e1b2d;
-    padding:22px;
-    border-radius:18px;
-    border:1px solid #24405f
-}
-
-h1{text-align:center}
-
-label{
-    display:block;
-    margin-top:18px;
-    margin-bottom:7px
-}
-
-input,select,button{
-    width:100%;
-    padding:14px;
-    border-radius:10px;
-    border:1px solid #294563;
-    font-size:16px;
-    box-sizing:border-box
-}
-
-input,select{
-    background:#071321;
-    color:white
+button,input,select{
+    font-family:inherit;
 }
 
 button{
-    margin-top:20px;
-    background:#1683ff;
-    color:white;
-    border:0;
+    cursor:pointer;
+}
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:#0d1320;
+    border-bottom:1px solid #1d293b;
+    padding:15px;
+}
+
+.header-inner{
+    max-width:1100px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    font-size:22px;
     font-weight:bold;
-    cursor:pointer
 }
 
-button:disabled{
-    opacity:.5
+.logo span{
+    color:#39e58c;
 }
 
-.info{
-    background:#081727;
-    padding:14px;
-    border-radius:10px;
-    margin-top:15px;
-    line-height:2
+.owner{
+    background:#10271d;
+    color:#39e58c;
+    border:1px solid #1e5d42;
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:13px;
+}
+
+.container{
+    width:min(1100px,94%);
+    margin:25px auto 60px;
+}
+
+.hero{
+    background:linear-gradient(135deg,#101a2c,#0b1220);
+    border:1px solid #1d2a3e;
+    border-radius:20px;
+    padding:24px;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.hero p{
+    color:#8e9bad;
+    line-height:1.8;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:13px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#0d1421;
+    border:1px solid #1c293b;
+    border-radius:17px;
+    padding:18px;
+}
+
+.card-title{
+    color:#8794a7;
+    font-size:13px;
+    margin-bottom:10px;
+}
+
+.card-value{
+    font-size:23px;
+    font-weight:bold;
+}
+
+.green{
+    color:#39e58c;
+}
+
+.blue{
+    color:#55a7ff;
+}
+
+.yellow{
+    color:#ffd35a;
+}
+
+.red{
+    color:#ff6875;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:18px;
+}
+
+.panel{
+    background:#0d1421;
+    border:1px solid #1c293b;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:18px;
+}
+
+.panel h2{
+    font-size:18px;
+    margin-bottom:16px;
+}
+
+.form{
+    display:grid;
+    gap:12px;
+}
+
+label{
+    color:#8996a9;
+    font-size:13px;
+}
+
+input,select{
+    width:100%;
+    background:#080e19;
+    color:white;
+    border:1px solid #26364c;
+    border-radius:11px;
+    padding:13px;
+    outline:none;
+}
+
+input:focus,select:focus{
+    border-color:#39e58c;
+}
+
+.btn{
+    border:0;
+    border-radius:11px;
+    padding:13px 16px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    background:#39e58c;
+    color:#06100b;
+}
+
+.btn-secondary{
+    background:#182438;
+    color:#dbe7f5;
+    border:1px solid #293b53;
+}
+
+.btn-danger{
+    background:#35151a;
+    color:#ff7d88;
+    border:1px solid #66252d;
+}
+
+.full{
+    width:100%;
+}
+
+.balance{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#091b14;
+    border:1px solid #194c38;
+    padding:15px;
+    border-radius:13px;
+    margin-bottom:15px;
+}
+
+.balance strong{
+    font-size:21px;
+    color:#39e58c;
+}
+
+.number-box{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:#080e19;
+    border:1px solid #26364c;
+    border-radius:13px;
+    padding:15px;
+    margin-bottom:10px;
+}
+
+.number-info strong{
+    display:block;
+    margin-bottom:7px;
+}
+
+.number-info small{
+    color:#8491a3;
 }
 
 .status{
-    display:none;
-    margin-top:15px;
-    padding:12px;
-    border-radius:10px;
-    background:#081727
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
 }
 
-.result{
-    display:none;
-    margin-top:20px;
-    padding:18px;
-    border-radius:12px;
-    background:#06131f;
-    border:1px solid #2472a5
+.available{
+    background:#102a1e;
+    color:#39e58c;
 }
 
-.code{
-    direction:ltr;
-    text-align:center;
-    font-size:22px;
-    letter-spacing:2px;
-    padding:17px 5px;
-    background:#020910;
-    border-radius:10px;
-    margin:15px 0;
-    word-break:break-all
+.waiting{
+    background:#2a2110;
+    color:#ffd35a;
 }
 
 .used{
-    background:#b52d3c
+    background:#24151a;
+    color:#ff7580;
 }
 
-.history{
-    margin-top:20px
+.table-wrap{
+    overflow-x:auto;
 }
 
-.item{
-    background:#081727;
-    padding:12px;
-    border-radius:10px;
-    margin-top:8px;
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:550px;
+}
+
+th,td{
+    text-align:right;
+    padding:13px 8px;
+    border-bottom:1px solid #1c293b;
     font-size:13px;
-    line-height:1.9
+}
+
+th{
+    color:#8491a3;
+}
+
+td{
+    color:#dbe3ed;
+}
+
+.empty{
+    color:#78869a;
+    text-align:center;
+    padding:25px;
+}
+
+.nav{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    margin-bottom:18px;
+}
+
+.nav button{
+    white-space:nowrap;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+.alert{
+    padding:13px;
+    border-radius:12px;
+    margin-top:12px;
+    display:none;
+    line-height:1.7;
+    font-size:13px;
+}
+
+.alert.show{
+    display:block;
+}
+
+.alert.success{
+    background:#0d291d;
+    border:1px solid #1c6444;
+    color:#69e8a6;
+}
+
+.alert.error{
+    background:#2a1115;
+    border:1px solid #6a252e;
+    color:#ff8992;
+}
+
+.alert.info{
+    background:#111f31;
+    border:1px solid #27496d;
+    color:#79baff;
+}
+
+.footer{
+    text-align:center;
+    color:#657286;
+    font-size:12px;
+    margin-top:30px;
+}
+
+@media(max-width:800px){
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:480px){
+    .cards{
+        grid-template-columns:1fr 1fr;
+        gap:9px;
+    }
+
+    .card{
+        padding:14px;
+    }
+
+    .card-value{
+        font-size:18px;
+    }
+
+    .hero h1{
+        font-size:21px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<header class="header">
+    <div class="header-inner">
+        <div class="logo">
+            CODE <span>●</span>
+        </div>
 
-<h1>CODE</h1>
+        <div class="owner">
+            👑 مالک — رایگان
+        </div>
+    </div>
+</header>
 
-<div class="info">
-    <div>نوع حساب: <b>مالک</b></div>
-    <div>سهمیه روزانه: <b>۴۰۰ درخواست</b></div>
-    <div>مصرف امروز: <b id="usedCount">۰</b></div>
-</div>
+<main class="container">
 
-<label>نوع ووچر</label>
+    <div class="hero">
+        <h1>پنل مدیریت شماره مجازی</h1>
+        <p>
+            مدیریت شماره‌ها، سفارش‌ها، کیف پول و سهمیه API
+        </p>
+    </div>
 
-<select id="voucherType">
-    <option value="">انتخاب کنید</option>
-    <option value="hot-voucher">Hot Voucher</option>
-</select>
+    <div class="cards">
 
-<label>مبلغ</label>
+        <div class="card">
+            <div class="card-title">نوع حساب</div>
+            <div class="card-value green">مالک</div>
+        </div>
 
-<input
-    id="amount"
-    type="number"
-    min="1"
-    placeholder="مثلاً 10"
->
+        <div class="card">
+            <div class="card-title">سهمیه API</div>
+            <div class="card-value" id="quota">۴۰۰</div>
+        </div>
 
-<button id="requestButton" onclick="requestVoucher()">
-    دریافت ووچر
-</button>
+        <div class="card">
+            <div class="card-title">مصرف امروز</div>
+            <div class="card-value yellow" id="used">۰</div>
+        </div>
 
-<div id="status" class="status"></div>
+        <div class="card">
+            <div class="card-title">موجودی مالک</div>
+            <div class="card-value green">رایگان</div>
+        </div>
 
-<div id="result" class="result">
+    </div>
 
-    <h3>ووچر دریافت شد</h3>
+    <div class="nav">
+        <button class="btn btn-primary" onclick="showSection('dashboard')">
+            داشبورد
+        </button>
 
-    <div id="voucherCode" class="code"></div>
+        <button class="btn btn-secondary" onclick="showSection('numbers')">
+            📱 شماره‌ها
+        </button>
 
-    <button onclick="copyVoucher()">
-        کپی کد
-    </button>
+        <button class="btn btn-secondary" onclick="showSection('orders')">
+            🛒 سفارش‌ها
+        </button>
 
-    <button class="used" onclick="markUsed()">
-        ثبت «مصرف‌شده»
-    </button>
+        <button class="btn btn-secondary" onclick="showSection('wallet')">
+            💰 کیف پول
+        </button>
 
-</div>
+        <button class="btn btn-secondary" onclick="showSection('admin')">
+            ⚙️ مدیریت
+        </button>
+    </div>
 
-<div class="history">
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="section active">
 
-<h3>سوابق</h3>
+        <div class="grid">
 
-<div id="historyList"></div>
+            <div class="panel">
+                <h2>📊 وضعیت پنل</h2>
 
-</div>
+                <div class="number-box">
+                    <div class="number-info">
+                        <strong>وضعیت API</strong>
+                        <small id="apiStatus">در حال بررسی...</small>
+                    </div>
 
-</div>
+                    <span id="apiBadge" class="status waiting">
+                        بررسی
+                    </span>
+                </div>
 
-<script src="app.js"></script>
+                <div class="number-box">
+                    <div class="number-info">
+                        <strong>مالک پنل</strong>
+                        <small>دسترسی کامل و استفاده رایگان</small>
+                    </div>
+
+                    <span class="status available">
+                        فعال
+                    </span>
+                </div>
+
+                <div class="number-box">
+                    <div class="number-info">
+                        <strong>سیستم قیمت‌گذاری</strong>
+                        <small>قیمت‌ها توسط مالک تعیین می‌شوند</small>
+                    </div>
+
+                    <span class="status available">
+                        فعال
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="panel">
+                <h2>🔌 اتصال API</h2>
+
+                <div class="form">
+
+                    <label>آدرس API</label>
+
+                    <input
+                        id="apiUrl"
+                        value="https://code-f6hx.onrender.com"
+                    >
+
+                    <button
+                        class="btn btn-primary full"
+                        onclick="checkAPI()">
+                        بررسی اتصال
+                    </button>
+
+                    <div id="apiAlert" class="alert"></div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>⚡ عملیات سریع</h2>
+
+            <div class="grid">
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="showSection('numbers')">
+                    📱 مدیریت شماره‌ها
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="showSection('orders')">
+                    🛒 مشاهده سفارش‌ها
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- NUMBERS -->
+    <section id="numbers" class="section">
+
+        <div class="panel">
+
+            <h2>📱 شماره‌های مجازی</h2>
+
+            <div class="form">
+
+                <label>کشور</label>
+
+                <select id="country">
+                    <option value="any">هر کشور</option>
+                    <option value="us">🇺🇸 آمریکا</option>
+                    <option value="gb">🇬🇧 انگلیس</option>
+                    <option value="de">🇩🇪 آلمان</option>
+                    <option value="fr">🇫🇷 فرانسه</option>
+                    <option value="ru">🇷🇺 روسیه</option>
+                    <option value="other">سایر</option>
+                </select>
+
+                <label>قیمت فروش به کاربر</label>
+
+                <input
+                    id="numberPrice"
+                    type="number"
+                    placeholder="مثلاً 100000"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="requestNumber()">
+                    دریافت شماره
+                </button>
+
+                <div id="numberAlert" class="alert"></div>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>شماره‌های فعلی</h2>
+
+            <div id="numbersList">
+
+                <div class="empty">
+                    هنوز شماره‌ای دریافت نشده است.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ORDERS -->
+    <section id="orders" class="section">
+
+        <div class="panel">
+
+            <h2>🛒 سفارش‌ها</h2>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>شناسه</th>
+                            <th>شماره</th>
+                            <th>کشور</th>
+                            <th>قیمت</th>
+                            <th>وضعیت</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="ordersBody">
+
+                        <tr>
+                            <td colspan="5" class="empty">
+                                هنوز سفارشی ثبت نشده است.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- WALLET -->
+    <section id="wallet" class="section">
+
+        <div class="panel">
+
+            <h2>💰 کیف پول</h2>
+
+            <div class="balance">
+                <span>موجودی مالک</span>
+                <strong>رایگان</strong>
+            </div>
+
+            <div class="number-box">
+
+                <div class="number-info">
+                    <strong>حساب مالک</strong>
+                    <small>
+                        برای مالک هزینه خرید شماره از موجودی کسر نمی‌شود.
+                    </small>
+                </div>
+
+                <span class="status available">
+                    FREE
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>شارژ کاربر</h2>
+
+            <div class="form">
+
+                <label>مبلغ شارژ</label>
+
+                <input
+                    type="number"
+                    id="chargeAmount"
+                    placeholder="مثلاً 500000"
+                >
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="demoCharge()">
+                    ثبت شارژ آزمایشی
+                </button>
+
+                <div id="chargeAlert" class="alert"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ADMIN -->
+    <section id="admin" class="section">
+
+        <div class="panel">
+
+            <h2>⚙️ تنظیمات مالک</h2>
+
+            <div class="form">
+
+                <label>قیمت پیش‌فرض شماره</label>
+
+                <input
+                    id="defaultPrice"
+                    type="number"
+                    placeholder="مثلاً 100000"
+                >
+
+                <label>نام پنل</label>
+
+                <input
+                    id="panelName"
+                    value="CODE"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="saveSettings()">
+                    ذخیره تنظیمات
+                </button>
+
+                <div id="settingsAlert" class="alert"></div>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>🔐 وضعیت مالک</h2>
+
+            <div class="number-box">
+
+                <div class="number-info">
+                    <strong>دسترسی مدیر</strong>
+                    <small>
+                        این نسخه برای محیط مالک طراحی شده است.
+                    </small>
+                </div>
+
+                <span class="status available">
+                    ADMIN
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div class="footer">
+        CODE © 2026 — پنل مدیریت
+    </div>
+
+</main>
+
+
+<script>
+
+/* =========================
+   CONFIG
+========================= */
+
+const DEFAULT_API =
+    "https://code-f6hx.onrender.com";
+
+const QUOTA_ENDPOINT =
+    "/api/quota";
+
+
+/* =========================
+   STATE
+========================= */
+
+let numbers =
+    JSON.parse(localStorage.getItem("code_numbers") || "[]");
+
+let orders =
+    JSON.parse(localStorage.getItem("code_orders") || "[]");
+
+let settings =
+    JSON.parse(localStorage.getItem("code_settings") || "{}");
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(id){
+
+    document.querySelectorAll(".section")
+        .forEach(section=>{
+            section.classList.remove("active");
+        });
+
+    const target =
+        document.getElementById(id);
+
+    if(target){
+        target.classList.add("active");
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================
+   ALERT
+========================= */
+
+function alertBox(id,message,type="info"){
+
+    const el =
+        document.getElementById(id);
+
+    if(!el) return;
+
+    el.className =
+        "alert show " + type;
+
+    el.textContent =
+        message;
+}
+
+
+/* =========================
+   API
+========================= */
+
+async function checkAPI(){
+
+    const base =
+        document.getElementById("apiUrl")
+        .value
+        .trim()
+        .replace(/\/+$/,"");
+
+    const status =
+        document.getElementById("apiStatus");
+
+    const badge =
+        document.getElementById("apiBadge");
+
+    status.textContent =
+        "در حال اتصال...";
+
+    badge.className =
+        "status waiting";
+
+    badge.textContent =
+        "بررسی";
+
+    try{
+
+        const response =
+            await fetch(
+                base + QUOTA_ENDPOINT,
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+            );
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        status.textContent =
+            "اتصال برقرار است";
+
+        badge.className =
+            "status available";
+
+        badge.textContent =
+            "متصل";
+
+        if(data){
+
+            if(
+                data.remaining !== undefined
+            ){
+                document.getElementById("quota")
+                    .textContent =
+                    formatNumber(data.remaining);
+            }
+
+            if(
+                data.used !== undefined
+            ){
+                document.getElementById("used")
+                    .textContent =
+                    formatNumber(data.used);
+            }
+        }
+
+        alertBox(
+            "apiAlert",
+            "اتصال به API با موفقیت برقرار شد.",
+            "success"
+        );
+
+    }catch(error){
+
+        status.textContent =
+            "API در دسترس نیست";
+
+        badge.className =
+            "status used";
+
+        badge.textContent =
+            "خطا";
+
+        alertBox(
+            "apiAlert",
+            "اتصال برقرار نشد. وضعیت سرویس یا CORS را بررسی کن.",
+            "error"
+        );
+
+        console.error(error);
+    }
+}
+
+
+/* =========================
+   NUMBER REQUEST
+========================= */
+
+async function requestNumber(){
+
+    const country =
+        document.getElementById("country").value;
+
+    const price =
+        document.getElementById("numberPrice").value;
+
+    /*
+       فعلاً endpoint خرید شماره در API
+       مشخص نشده است.
+
+       بنابراین این بخش شماره جعلی تولید نمی‌کند
+       و ادعا نمی‌کند خرید واقعی انجام شده.
+    */
+
+    if(!price){
+
+        alertBox(
+            "numberAlert",
+            "ابتدا قیمت فروش را وارد کن.",
+            "error"
+        );
+
+        return;
+    }
+
+    alertBox(
+        "numberAlert",
+        "Endpoint دریافت شماره هنوز در API مشخص نشده است. فقط /api/quota در اختیار داریم؛ بنابراین شماره جعلی ایجاد نمی‌کنیم.",
+        "info"
+    );
+}
+
+
+/* =========================
+   RENDER NUMBERS
+========================= */
+
+function renderNumbers(){
+
+    const box =
+        document.getElementById("numbersList");
+
+    if(!numbers.length){
+
+        box.innerHTML =
+            '<div class="empty">هنوز شماره‌ای دریافت نشده است.</div>';
+
+        return;
+    }
+
+    box.innerHTML =
+        numbers.map((item,index)=>`
+
+            <div class="number-box">
+
+                <div class="number-info">
+
+                    <strong>
+                        ${escapeHTML(item.number)}
+                    </strong>
+
+                    <small>
+                        ${escapeHTML(item.country)}
+                        — قیمت:
+                        ${formatNumber(item.price)}
+                    </small>
+
+                </div>
+
+                <span class="status available">
+                    موجود
+                </span>
+
+            </div>
+
+        `).join("");
+}
+
+
+/* =========================
+   ORDERS
+========================= */
+
+function renderOrders(){
+
+    const body =
+        document.getElementById("ordersBody");
+
+    if(!orders.length){
+
+        body.innerHTML =
+            '<tr><td colspan="5" class="empty">هنوز سفارشی ثبت نشده است.</td></tr>';
+
+        return;
+    }
+
+    body.innerHTML =
+        orders.map(order=>`
+
+            <tr>
+
+                <td>
+                    ${escapeHTML(order.id)}
+                </td>
+
+                <td>
+                    ${escapeHTML(order.number)}
+                </td>
+
+                <td>
+                    ${escapeHTML(order.country)}
+                </td>
+
+                <td>
+                    ${formatNumber(order.price)}
+                </td>
+
+                <td>
+                    <span class="status ${order.statusClass}">
+                        ${escapeHTML(order.status)}
+                    </span>
+                </td>
+
+            </tr>
+
+        `).join("");
+}
+
+
+/* =========================
+   SETTINGS
+========================= */
+
+function loadSettings(){
+
+    if(settings.defaultPrice){
+
+        document.getElementById("defaultPrice")
+            .value =
+            settings.defaultPrice;
+    }
+
+    if(settings.panelName){
+
+        document.getElementById("panelName")
+            .value =
+            settings.panelName;
+    }
+}
+
+
+function saveSettings(){
+
+    settings = {
+
+        defaultPrice:
+            document.getElementById("defaultPrice").value,
+
+        panelName:
+            document.getElementById("panelName").value
+
+    };
+
+    localStorage.setItem(
+        "code_settings",
+        JSON.stringify(settings)
+    );
+
+    alertBox(
+        "settingsAlert",
+        "تنظیمات ذخیره شد.",
+        "success"
+    );
+}
+
+
+/* =========================
+   DEMO CHARGE
+========================= */
+
+function demoCharge(){
+
+    const amount =
+        document.getElementById("chargeAmount")
+        .value;
+
+    if(!amount){
+
+        alertBox(
+            "chargeAlert",
+            "مبلغ را وارد کن.",
+            "error"
+        );
+
+        return;
+    }
+
+    alertBox(
+        "chargeAlert",
+        "این بخش فعلاً آزمایشی است و به درگاه پرداخت متصل نیست.",
+        "info"
+    );
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function formatNumber(value){
+
+    try{
+
+        return Number(value)
+            .toLocaleString("fa-IR");
+
+    }catch(e){
+
+        return value;
+    }
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+/* =========================
+   INIT
+========================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+
+        renderNumbers();
+
+        renderOrders();
+
+        loadSettings();
+
+        /*
+           تلاش خودکار برای دریافت سهمیه.
+           اگر Render خاموش یا API خراب باشد،
+           پنل همچنان باز می‌شود.
+        */
+
+        checkAPI();
+
+    }
+);
+
+</script>
 
 </body>
-</html>
+    </html>
